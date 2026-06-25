@@ -1,152 +1,165 @@
-# fiscal-risk-model
-
 # Fiscal Risk Index
 
-An interpretable fiscal risk index built using macroeconomic, demographic, external sector and fiscal indicators from the World Bank (WDI) and the International Monetary Fund (Fiscal Monitor).
+An interpretable **Fiscal Risk Index (FRI)** built from macroeconomic, demographic, external sector, and fiscal indicators obtained from the **World Bank (World Development Indicators)** and the **International Monetary Fund (Fiscal Monitor)**.
 
-## Project Overview
+The project provides a transparent and reproducible framework to assess and compare fiscal vulnerability across countries using publicly available data.
 
-Fiscal sustainability is a key determinant of economic stability and sovereign creditworthiness. Governments facing persistent deficits, rising debt burdens, adverse demographic trends and weak economic growth are more vulnerable to fiscal stress.
+---
 
-This project develops a Fiscal Risk Index (FRI) to measure and compare fiscal vulnerability across countries using publicly available data.
+## Overview
 
-The objective is to build a transparent and reproducible framework capable of identifying countries with higher levels of fiscal fragility.
+Fiscal sustainability plays a central role in macroeconomic stability and sovereign creditworthiness. Persistent fiscal deficits, rising public debt, weak economic performance and adverse demographic dynamics increase governments' exposure to fiscal stress.
+
+This project develops a composite **Fiscal Risk Index (FRI)** using **Principal Component Analysis (PCA)** to summarize multiple dimensions of fiscal vulnerability into a single indicator.
+
+The final index is scaled from:
+
+* **0** → Lowest fiscal vulnerability
+* **100** → Highest fiscal vulnerability
+
+---
 
 ## Research Question
 
-Which countries exhibit the highest levels of fiscal vulnerability when considering fiscal, macroeconomic, demographic and external sector indicators?
+> Which countries exhibit the highest levels of fiscal vulnerability when macroeconomic, demographic, external sector and fiscal indicators are jointly considered?
+
+---
 
 ## Data Sources
 
-### World Bank - World Development Indicators (WDI)
+### World Bank – World Development Indicators (WDI)
 
-* GDP per capita
+* GDP per Capita
 * Real GDP Growth
-* Deposit Interest Rate
-* Inflation Rate
+* Inflation Rate (Consumer Prices)
 * GDP Deflator Inflation
-* Unemployment Rate
-* Fertility Rate
+* Compulsory Education Duration
 * Population Aged 65+
 * Age Dependency Ratio
+* Unemployment Rate
 * Government Revenue (% GDP)
 * Government Expenditure (% GDP)
-* Current Account Balance (% GDP)
-* External Debt (% GNI)
 * Gross Capital Formation (% GDP)
+* Gross Domestic Savings (% GDP)
+* Exports of Goods and Services (% GDP)
 * International Reserves (Months of Imports)
 
-### International Monetary Fund (Fiscal Monitor)
+### International Monetary Fund – Fiscal Monitor
 
-* Gross Debt (% GDP)
-* Net Debt (% GDP)
+* Gross Government Debt (% GDP)
 * Fiscal Balance (% GDP)
-* Primary Balance (% GDP)
-* Cyclically Adjusted Primary Balance (% GDP)
+
+---
 
 ## Methodology
 
-The project follows four major steps:
+The project follows four stages:
 
 ### 1. Data Collection
-
-Data are collected directly from:
 
 * World Bank API
 * IMF Fiscal Monitor API
 
-### 2. Data Processing
+### 2. Data Preprocessing
 
 * Country harmonization
-* Missing value treatment
-* Variable standardization
-* Construction of a country-year panel dataset
+* Missing value imputation (country median)
+* Dataset validation
+* Construction of a country-year panel
 
 ### 3. Feature Engineering
 
-Indicators are grouped into four dimensions:
+Indicators are standardized before dimensionality reduction.
 
-#### Fiscal Sustainability
+Variables expected to reduce fiscal vulnerability have their direction adjusted so that higher values consistently indicate greater fiscal risk.
 
-* Gross Debt (% GDP)
-* Net Debt (% GDP)
-* Fiscal Balance (% GDP)
-* Primary Balance (% GDP)
+### 4. Fiscal Risk Index
 
-#### Macroeconomic Stability
+The Fiscal Risk Index is estimated using **Principal Component Analysis (PCA)**.
 
-* GDP Growth
-* Inflation
-* Unemployment
+The first seven principal components are combined using their explained variance as weights to construct the final index.
+
+Finally, the index is normalized to a 0–100 scale.
+
+---
+
+## Variables
+
+### Macroeconomic
+
 * GDP per Capita
+* Real GDP Growth
+* Inflation Rate
+* GDP Deflator Inflation
+* Unemployment Rate
 
-#### Demographic Pressure
+### Fiscal
+
+* Government Revenue (% GDP)
+* Government Expenditure (% GDP)
+* Gross Government Debt (% GDP)
+* Fiscal Balance (% GDP)
+
+### Demographic
 
 * Population Aged 65+
-* Fertility Rate
 * Age Dependency Ratio
+* Compulsory Education Duration
 
-#### External Vulnerability
+### External Sector
 
-* Current Account Balance
-* External Debt
-* International Reserves
+* Gross Capital Formation (% GDP)
+* Gross Domestic Savings (% GDP)
+* Exports (% GDP)
+* International Reserves (Months of Imports)
 
-### 4. Fiscal Risk Index Construction
-
-Alternative methodologies considered:
-
-* Weighted Scorecard
-* Principal Component Analysis (PCA)
-* Z-Score Aggregation
-
-The final index is normalized between:
-
-* 0 = Lowest Fiscal Risk
-* 100 = Highest Fiscal Risk
+---
 
 ## Repository Structure
 
 ```text
-fiscal-risk-index/
+fiscal-risk-model/
 
 ├── data/
-│   ├── raw/
-│   └── processed/
+│   ├── wdi.csv
+│   ├── imf.csv
+│   ├── ratings.xlsx
+│   └── panel_final.csv
 │
-├── notebooks/
+├── download.py
+├── preprocess.py
+├── index.py
 │
-├── src/
-│   ├── download_wdi.py
-│   ├── download_imf.py
-│   ├── build_panel.py
-│   └── calculate_fiscal_risk_index.py
-│
-├── README.md
-└── requirements.txt
+├── requirements.txt
+└── README.md
 ```
+
+---
 
 ## Technologies
 
 * Python
 * Pandas
 * NumPy
-* Scikit-Learn
+* Scikit-learn
 * Requests
 * World Bank API
 * IMF SDMX API
-* Streamlit
+
+---
 
 ## Future Improvements
 
-* Governance indicators (Worldwide Governance Indicators)
-* Sovereign credit ratings
-* Fiscal stress prediction models
-* Machine learning classification of fiscal crises
-* Interactive dashboard
+* Validation against sovereign credit ratings (Moody's, S&P and Fitch)
+* Factor Analysis
+* Kernel PCA
+* Autoencoder-based Fiscal Risk Index
+* Fiscal crisis prediction models
+
+---
 
 ## Author
 
-João Victor Freitas
+**João Victor Freitas**
 
-Economist | Data Scientist | Financial Risk Professional
+Economist • Data Scientist • Financial Risk Professional
